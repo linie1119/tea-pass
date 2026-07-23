@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeaPass</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header-title">
+        <img src="icons/icon128.png" alt="" class="logo-icon">
+        <h1>TeaPass</h1>
+      </div>
+      <span class="version">v1.0</span>
+    </header>
+
+    <!-- 状态栏 -->
+    <div id="statusBar" class="status-bar hidden">
+      <span id="statusText"></span>
+    </div>
+
+    <!-- 方案选择 -->
+    <section class="section">
+      <label class="label">组合方案</label>
+      <select id="presetSelect" class="select">
+        <option value="">请选择方案...</option>
+      </select>
+    </section>
+
+    <!-- 配置概览 -->
+    <section class="section" id="presetOverview" style="display:none;">
+      <div class="overview-grid">
+        <div class="overview-item">
+          <span class="overview-label">环境</span>
+          <span class="overview-value" id="ovEnv">-</span>
+        </div>
+        <div class="overview-item">
+          <span class="overview-label">账号</span>
+          <span class="overview-value" id="ovAccount">-</span>
+        </div>
+        <div class="overview-item">
+          <span class="overview-label">登录接口</span>
+          <span class="overview-value" id="ovLogin">-</span>
+        </div>
+        <div class="overview-item">
+          <span class="overview-label">目标</span>
+          <span class="overview-value" id="ovLocalhost">-</span>
+        </div>
+        <div class="overview-item">
+          <span class="overview-label">白名单</span>
+          <span class="overview-value" id="ovWhitelist">-</span>
+        </div>
+        <div class="overview-item">
+          <span class="overview-label">映射</span>
+          <span class="overview-value" id="ovMapping">-</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 快捷操作 -->
+    <section class="section actions">
+      <button id="btnLogin" class="btn btn-primary" disabled>
+        <span class="icon">&#128273;</span> 一键登录并同步
+      </button>
+      <button id="btnSyncCookie" class="btn btn-secondary" disabled>
+        <span class="icon">&#127850;</span> 同步 Cookie
+      </button>
+      <button id="btnSyncToken" class="btn btn-secondary" disabled>
+        <span class="icon">&#127915;</span> 同步 Token
+      </button>
+    </section>
+
+    <!-- Cookie 预览 -->
+    <section class="section">
+      <div class="section-header">
+        <label class="label">当前环境 Cookie</label>
+        <button id="btnRefreshCookies" class="btn-icon" title="刷新">&#128260;</button>
+      </div>
+      <div id="cookieList" class="cookie-list">
+        <div class="empty">选择一个方案后查看 Cookie</div>
+      </div>
+    </section>
+
+    <!-- 底部链接 -->
+    <footer class="footer">
+      <a href="#" id="linkOptions" class="link">&#9881;&#65039; 打开配置页面</a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

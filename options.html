@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TeaPass - 配置</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="page-header">
+        <div class="header-brand">
+          <img src="icons/icon128.png" alt="TeaPass" class="header-icon" />
+          <h1>TeaPass 配置</h1>
+        </div>
+        <p class="subtitle">管理独立配置项与组合方案</p>
+      </header>
+
+      <!-- Tab 导航 -->
+      <nav class="tab-nav">
+        <button class="tab-btn active" data-tab="independent">独立配置</button>
+        <button class="tab-btn" data-tab="presets">组合方案</button>
+      </nav>
+
+      <!-- 独立配置 Tab -->
+      <div id="tab-independent" class="tab-content active">
+        <main class="main">
+          <!-- 环境配置 -->
+          <section class="card">
+            <div class="card-header">
+              <h2>环境配置</h2>
+              <button class="btn btn-sm btn-primary" data-action="add-env">
+                + 添加环境
+              </button>
+            </div>
+            <div class="card-body">
+              <div id="envList" class="item-list">
+                <div class="empty">暂无环境配置</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 账号配置 -->
+          <section class="card">
+            <div class="card-header">
+              <h2>账号配置</h2>
+              <button class="btn btn-sm btn-primary" data-action="add-account">
+                + 添加账号
+              </button>
+            </div>
+            <div class="card-body">
+              <div id="accountList" class="item-list">
+                <div class="empty">暂无账号配置</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 登录接口配置 -->
+          <section class="card">
+            <div class="card-header">
+              <h2>登录接口配置</h2>
+              <button class="btn btn-sm btn-primary" data-action="add-login">
+                + 添加登录接口
+              </button>
+            </div>
+            <div class="card-body">
+              <div id="loginList" class="item-list">
+                <div class="empty">暂无登录接口配置</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 本地代理设置 -->
+          <section class="card">
+            <div class="card-header">
+              <h2>
+                本地代理设置<small
+                  >（需要双击启动插件文件夹内proxy文件夹下的start-proxy.bat脚本，才可使用登录功能）</small
+                >
+              </h2>
+            </div>
+            <div class="card-body">
+              <div class="proxy-port-row">
+                <label for="proxyPortInput">本地代理端口</label>
+                <input
+                  type="number"
+                  id="proxyPortInput"
+                  value="9793"
+                  min="1024"
+                  max="65535"
+                />
+                <button class="btn btn-sm btn-primary" id="btnSaveProxyPort">
+                  保存
+                </button>
+                <span id="proxyPortStatus"></span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Cookie 映射配置集 -->
+          <section class="card">
+            <div class="card-header">
+              <h2>Cookie 名称映射配置集</h2>
+              <button
+                class="btn btn-sm btn-primary"
+                data-action="add-mapping-set"
+              >
+                + 添加映射集
+              </button>
+            </div>
+            <div class="card-body">
+              <div id="mappingSetList" class="item-list">
+                <div class="empty">暂无映射配置集</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 白名单配置集 -->
+          <section class="card">
+            <div class="card-header">
+              <h2>Cookie 同步白名单配置集</h2>
+              <button
+                class="btn btn-sm btn-primary"
+                data-action="add-whitelist-set"
+              >
+                + 添加白名单集
+              </button>
+            </div>
+            <div class="card-body">
+              <div id="whitelistSetList" class="item-list">
+                <div class="empty">暂无白名单配置集</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 目标配置 -->
+          <section class="card">
+            <div class="card-header">
+              <h2>同步目标</h2>
+              <button
+                class="btn btn-sm btn-primary"
+                data-action="add-localhost"
+              >
+                + 添加目标
+              </button>
+            </div>
+            <div class="card-body">
+              <div id="localhostList" class="item-list">
+                <div class="empty">暂无 目标配置</div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      <!-- 组合方案 Tab -->
+      <div id="tab-presets" class="tab-content">
+        <main class="main">
+          <section class="card">
+            <div class="card-header">
+              <h2>组合方案</h2>
+              <button class="btn btn-sm btn-primary" data-action="add-preset">
+                + 添加方案
+              </button>
+            </div>
+            <div class="card-body">
+              <div id="presetList" class="item-list">
+                <div class="empty">暂无组合方案</div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      <footer class="page-footer">
+        <div class="config-actions">
+          <button class="btn btn-sm btn-secondary" id="btnExportConfig">导出配置</button>
+          <button class="btn btn-sm btn-secondary" id="btnImportConfig">导入配置</button>
+          <input type="file" id="importFileInput" accept=".json" style="display:none">
+        </div>
+        <span id="saveStatus" class="save-status"></span>
+      </footer>
+    </div>
+
+    <!-- ===== 环境编辑弹窗 ===== -->
+    <div id="envModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="envModalTitle">添加环境</h3>
+          <button class="modal-close" data-close>&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="envEditId" />
+          <div class="form-group">
+            <label>环境名称</label
+            ><input type="text" id="envEditName" placeholder="如：开发环境" />
+          </div>
+          <div class="form-group">
+            <label>域名</label
+            ><input
+              type="text"
+              id="envEditDomain"
+              placeholder="如：dev.example.com"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-close>取消</button>
+          <button class="btn btn-primary" id="btnSaveEnv">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 账号编辑弹窗 ===== -->
+    <div id="accountModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="accountModalTitle">添加账号</h3>
+          <button class="modal-close" data-close>&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="accountEditId" />
+          <div class="form-group">
+            <label>配置名称</label
+            ><input
+              type="text"
+              id="accountEditName"
+              placeholder="如：管理员账号"
+            />
+          </div>
+          <div class="form-group">
+            <label>用户名</label
+            ><input
+              type="text"
+              id="accountEditUsername"
+              placeholder="用户名/邮箱"
+            />
+          </div>
+          <div class="form-group">
+            <label>密码</label
+            ><input
+              type="password"
+              id="accountEditPassword"
+              placeholder="密码"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-close>取消</button>
+          <button class="btn btn-primary" id="btnSaveAccount">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 登录接口编辑弹窗 ===== -->
+    <div id="loginModal" class="modal hidden">
+      <div class="modal-content" style="max-width: 520px">
+        <div class="modal-header">
+          <h3 id="loginModalTitle">添加登录接口</h3>
+          <button class="modal-close" data-close>&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="loginEditId" />
+          <div class="form-group">
+            <label>配置名称</label
+            ><input
+              type="text"
+              id="loginEditName"
+              placeholder="如：默认登录接口"
+            />
+          </div>
+          <div class="form-group">
+            <label>登录接口 URL</label
+            ><input
+              type="text"
+              id="loginEditUrl"
+              placeholder="https://api.example.com/auth/login"
+            />
+          </div>
+          <div class="form-grid two-col">
+            <div class="form-group">
+              <label>请求方法</label>
+              <select id="loginEditMethod">
+                <option value="POST">POST</option>
+                <option value="GET">GET</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Content-Type</label>
+              <select id="loginEditContentType">
+                <option value="json">application/json</option>
+                <option value="form">application/x-www-form-urlencoded</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label
+              >请求体模板
+              <small
+                >（使用 {{username}} 和 {{password}} 作为占位符）</small
+              ></label
+            >
+            <textarea
+              id="loginEditBodyTemplate"
+              rows="3"
+              placeholder='{ "username": "{{username}}", "password": "{{password}}" }'
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label>Token 提取路径 <small>（如 data.token）</small></label
+            ><input
+              type="text"
+              id="loginEditTokenPath"
+              placeholder="data.token"
+            />
+          </div>
+          <h4 class="subheading">Token Cookie 设置</h4>
+          <div class="form-grid three-col">
+            <div class="form-group">
+              <label>Cookie 名称</label
+              ><input type="text" id="loginEditTokenName" value="token" />
+            </div>
+            <div class="form-group">
+              <label>Path</label
+              ><input type="text" id="loginEditTokenPath2" value="/" />
+            </div>
+            <div class="form-group">
+              <label>HttpOnly</label>
+              <select id="loginEditTokenHttpOnly">
+                <option value="false">否</option>
+                <option value="true">是</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-close>取消</button>
+          <button class="btn btn-primary" id="btnSaveLogin">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Cookie 映射集编辑弹窗 ===== -->
+    <div id="mappingSetModal" class="modal hidden">
+      <div class="modal-content" style="max-width: 520px">
+        <div class="modal-header">
+          <h3 id="mappingSetModalTitle">添加 Cookie 映射集</h3>
+          <button class="modal-close" data-close>&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="mappingSetEditId" />
+          <div class="form-group">
+            <label>配置集名称</label
+            ><input
+              type="text"
+              id="mappingSetEditName"
+              placeholder="如：默认映射"
+            />
+          </div>
+          <div class="form-group"><label>映射规则</label></div>
+          <div id="mappingSetEditRows" class="inline-list"></div>
+          <button
+            class="btn btn-sm btn-secondary"
+            id="btnAddMappingRow"
+            style="margin-top: 8px"
+          >
+            + 添加映射规则
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-close>取消</button>
+          <button class="btn btn-primary" id="btnSaveMappingSet">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 白名单集编辑弹窗 ===== -->
+    <div id="whitelistSetModal" class="modal hidden">
+      <div class="modal-content" style="max-width: 480px">
+        <div class="modal-header">
+          <h3 id="whitelistSetModalTitle">添加白名单集</h3>
+          <button class="modal-close" data-close>&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="whitelistSetEditId" />
+          <div class="form-group">
+            <label>配置集名称</label
+            ><input
+              type="text"
+              id="whitelistSetEditName"
+              placeholder="如：默认白名单"
+            />
+          </div>
+          <div class="form-group"><label>白名单规则</label></div>
+          <div id="whitelistSetEditRows" class="inline-list"></div>
+          <button
+            class="btn btn-sm btn-secondary"
+            id="btnAddWhitelistRow"
+            style="margin-top: 8px"
+          >
+            + 添加 Cookie 名称
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-close>取消</button>
+          <button class="btn btn-primary" id="btnSaveWhitelistSet">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====目标编辑弹窗 ===== -->
+    <div id="localhostModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="localhostModalTitle">添加 目标</h3>
+          <button class="modal-close" data-close>&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="localhostEditId" />
+          <div class="form-group">
+            <label>配置名称</label
+            ><input
+              type="text"
+              id="localhostEditName"
+              placeholder="如：3000端口"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              >目标域名 <small>（支持带端口，如 localhost:3000）</small></label
+            ><input
+              type="text"
+              id="localhostEditDomain"
+              placeholder="localhost:3000"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-close>取消</button>
+          <button class="btn btn-primary" id="btnSaveLocalhost">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 组合方案编辑弹窗 ===== -->
+    <div id="presetModal" class="modal hidden">
+      <div class="modal-content" style="max-width: 540px">
+        <div class="modal-header">
+          <h3 id="presetModalTitle">添加组合方案</h3>
+          <button class="modal-close" data-close>&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="presetEditId" />
+          <div class="form-group">
+            <label>方案名称</label
+            ><input
+              type="text"
+              id="presetEditName"
+              placeholder="如：开发环境一键登录"
+            />
+          </div>
+          <div class="form-group">
+            <label>目标环境 <span style="color: #c00">*</span></label>
+            <select id="presetEditEnvId">
+              <option value="">请选择环境...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>登录账号</label>
+            <select id="presetEditAccountId">
+              <option value="">不选择</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>登录接口</label>
+            <select id="presetEditLoginConfigId">
+              <option value="">不选择</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>同步目标 <small>（不选择则默认为 localhost）</small></label>
+            <div id="presetEditLocalhostTargets" class="checkbox-list"></div>
+          </div>
+          <div class="form-group">
+            <label>Cookie 白名单集</label>
+            <div id="presetEditWhitelistSets" class="checkbox-list"></div>
+          </div>
+          <div class="form-group">
+            <label>Cookie 名称映射集</label>
+            <div id="presetEditMappingSets" class="checkbox-list"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-close>取消</button>
+          <button class="btn btn-primary" id="btnSavePreset">保存</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="options.js"></script>
+  </body>
+</html>
